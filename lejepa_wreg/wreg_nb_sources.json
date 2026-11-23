@@ -1,0 +1,21 @@
+{
+ "notebook": "<data-root>/workspaces/Jupyter_AI/MaskedAutoencoders/ImageNet-AE-selfteach.ipynb",
+ "functions": {
+  "sliced_wasserstein_distance": {
+   "cell": 25,
+   "sha256": "864bd9004ec2125111cbd481ced8b75ab69228bf5b609c07e9af25b030b29bb0"
+  },
+  "basis_wasserstein_distance": {
+   "cell": 26,
+   "sha256": "b0ca3a71edc82f027093e114189feb12bb7360445cae8d43075083e9703cc193"
+  },
+  "token_sliced_wasserstein_distance": {
+   "cell": 27,
+   "sha256": "cff8697c0765400566f73036ae8fbfba4965ebc8e5542104bc21865286894182"
+  },
+  "channel_sliced_wasserstein_distance": {
+   "cell": 28,
+   "sha256": "e74bb8eaf3a91046b1ddf7d6adadbd7a388aefa06156e8310e9e94cb451adb02"
+  }
+ }
+}

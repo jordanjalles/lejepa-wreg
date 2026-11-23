@@ -1,0 +1,21 @@
+# NAME ARM LAM SEED SPLIT EPOCHS [extra train.py args]
+# Tuning at the LeJEPA default λ 0.02 (user 2026-11-09); change λ only if a run collapses or learns too slowly.
+# Runs abort as FAILED when the per-dimension feature std falls below 5% of its init value (train.py COLLAPSE_FRAC).
+lejepa-wreg-tune-B-lam0.02-s0 B 0.02 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+# B λ 0.02 collapsed by epoch 5 (std 0.0074 vs init 0.53; reg grad 1000x below align). Raise λ:
+lejepa-wreg-tune-B-lam0.9-s0 B 0.9 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+lejepa-wreg-tune-B-lam0.99-s0 B 0.99 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+lejepa-wreg-tune-A-lam0.02-s0 A 0.02 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+lejepa-wreg-tune-C-lam0.02-s0 C 0.02 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+# 2026-11-09 user: sweep higher λ for B. At λ 0.02 the reg grad was ~1000x below align, so grads balance near λ 0.999.
+lejepa-wreg-tune-B-lam0.995-s0 B 0.995 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+lejepa-wreg-tune-B-lam0.999-s0 B 0.999 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+lejepa-wreg-tune-B-lam0.9995-s0 B 0.9995 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+lejepa-wreg-tune-B-lam0.9999-s0 B 0.9999 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50
+# 2026-11-10 root-cause tests (lejepa_wreg/diagnose.py). One change each vs B λ 0.999 (best B, probe 49.6%).
+# 1. projector: notebook Wasserstein on A's MLP+BN projector output instead of SIGReg
+lejepa-wreg-tune-A-wasserstein-lam0.999-s0 A 0.999 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50 --reg wasserstein
+# 2. dead zone: undo the notebook's outer .square() on each Wasserstein term
+lejepa-wreg-tune-B-nosquare-lam0.999-s0 B 0.999 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50 --wsquare 0
+# 3. final LayerNorm restored in B
+lejepa-wreg-tune-B-layernorm-lam0.999-s0 B 0.999 0 tune 50 --eval_every 5 --drift_every 5 --ckpt_every 50 --final_norm 1
